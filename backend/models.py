@@ -16,7 +16,6 @@ class Game(models.Model):
     time = models.IntegerField(default=None, null=True)
 
 
-
 class Malfunction(models.Model):
     idgameentity = models.ForeignKey(Game, on_delete=models.CASCADE)
     description = models.TextField(null=True)

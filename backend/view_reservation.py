@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, JsonResponse
 
-from backend.models import Reservation
+from backend.models import Reservation, Game
 
 
 @login_required
@@ -17,6 +17,13 @@ def reservation(request):
             })
 
         new_reservation = Reservation()
-        print(request.user.username)
-    return JsonResponse(data={'tmp': 'dupa'})
+        new_reservation.data = data
+        new_reservation.id_user = request.user
+        new_reservation.idgame = Game.objects.get(id=id_game)
+
+        new_reservation.save()
+
+        return JsonResponse({'Reservation': 'done'})
+    else:
+        return JsonResponse({'Reservation': 'failed, use POST'})
 
