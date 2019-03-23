@@ -9,4 +9,6 @@ urlpatterns = [
     path('add_game', views.add_game, name='add_game'),
     path('statistic', viewStatistics.tmp, name='statistics'),
     path('reservation', view_reservation.reservation, name='reservation'),
+    path('import_csv', views.import_csv, name='import_csv'),
+
 ]

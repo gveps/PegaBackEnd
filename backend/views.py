@@ -1,9 +1,6 @@
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
-
 from django.http import HttpResponse, JsonResponse
-from django.db.models import Max
 from backend.models import Game
+import csv
 
 
 def index(request):
@@ -31,17 +28,17 @@ def add_game(request):
         id_game = same_game.id_game
     else:
         maxi = Game.objects.latest('id_game')
-        id_game = maxi.id_game+1
+        id_game = maxi.id_game + 1
 
-    base_game_title=request.GET.get('base_game_title')
-    id_base_game=None
+    base_game_title = request.GET.get('base_game_title')
+    id_base_game = None
     if base_game_title is not None:
         base_games = Game.objects.filter(title=base_game_title)
-        if len(base_games)>0:
-            base_game=base_games.first()
-            id_base_game=base_game.id_game
+        if len(base_games) > 0:
+            base_game = base_games.first()
+            id_base_game = base_game.id_game
         else:
-            id_base_game=None
+            id_base_game = None
 
     description = request.GET.get("description", "")
     photo = request.GET.get("photo")
@@ -50,7 +47,7 @@ def add_game(request):
     game.description = description
     game.photo = photo
     game.id_game = id_game
-    game.id_base_game=id_base_game
+    game.id_base_game = id_base_game
     game.save()
 
     valid_json = {
@@ -59,3 +56,20 @@ def add_game(request):
     }
 
     return JsonResponse(valid_json)
+
+
+def import_csv(request):
+    with open('backend/resources/games.csv', 'r') as csvFile:
+        reader = csv.reader(csvFile)
+        for row in reader:
+            print(row)
+            game = Game()
+            game.title = row[2]
+            game.min_players = int(row[3])
+            game.max_players = int(row[4])
+            game.id_game = row[1]
+            game.title = row[5]
+            game.popularity = row[6]
+            game.save()
+    csvFile.close()
+    return HttpResponse("OK")

@@ -14,6 +14,7 @@ class Game(models.Model):
     min_players = models.IntegerField(default=1)
     max_players = models.IntegerField(default=None, null=True)
     time = models.IntegerField(default=None, null=True)
+    popularity=models.IntegerField(default=0,null=True)
 
     def __str__(self):
         return f'title: {self.title} id: {self.id}'
