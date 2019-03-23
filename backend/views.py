@@ -62,13 +62,13 @@ def import_csv(request):
     with open('backend/resources/games.csv', 'r') as csvFile:
         reader = csv.reader(csvFile)
         for row in reader:
-            print(row)
+            print(row[2])
             game = Game()
             game.title = row[2]
             game.min_players = int(row[3])
             game.max_players = int(row[4])
             game.id_game = row[1]
-            game.title = row[5]
+            game.time = int(row[5])
             game.popularity = row[6]
             game.save()
     csvFile.close()
