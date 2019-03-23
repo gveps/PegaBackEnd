@@ -110,7 +110,7 @@ def get_all_games(request):
                 'time': game.time
             }
             result.append(json)
-        print(result)
-        return JsonResponse(result[:10], safe=False)
+        print(len(result))
+        return JsonResponse(result, safe=False)
     else:
         return JsonResponse({'Response': 'use GET'})

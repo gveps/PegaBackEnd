@@ -4,7 +4,6 @@ from django.http import HttpResponse, JsonResponse
 from backend.models import Reservation, Game
 
 
-@login_required
 def reservation(request):
     if request.method == 'POST':
         data = request.POST.get('data')

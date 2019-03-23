@@ -8,22 +8,23 @@ import json
 
 def tmp(request):
     # games = Game.objects.all()
-    topReservations = Reservation.objects.values('idgame').annotate(total=Count('idgame')).order_by('-total')[:10]
+    #topReservations = Reservation.objects.values('idgame').annotate(total=Count('idgame')).order_by('-total')[:10]
     result = []
 
-    for elem in topReservations:
-        myGame = Game.objects.get(id=elem['idgame'])
+    # for elem in topReservations:
+    #     myGame = Game.objects.get(id=elem['idgame'])
+    #     dic = {"id": myGame.id, "Id_game": myGame.id_game, "Title": myGame.title, "Description": myGame.description, "Photo": myGame.photo, "Barcode": myGame.barcode, "Rate": myGame.rate, "Id_base_game": myGame.id_base_game, "Min_players": myGame.min_players, "Max_players": myGame.max_players, "Time": myGame.time}
+    #     result.append(dic)
 
-        # image_file = open("backend/resources/game_photos/" + myGame.photo, "rb")
-        # encoded_string = base64.b64encode(image_file.read())
-        #
-        # base64_string = encoded_string.decode('utf-8')
-
-        dic = {"id": myGame.id, "Id_game": myGame.id_game, "Title": myGame.title, "Description": myGame.description, "Photo": myGame.photo, "Barcode": myGame.barcode, "Rate": myGame.rate, "Id_base_game": myGame.id_base_game, "Min_players": myGame.min_players, "Max_players": myGame.max_players, "Time": myGame.time}
-        # image_file.close()
+    top = Game.objects.order_by('-popularity')[0:10]
+    for myGame in top:
+        dic = {"id": myGame.id, "Id_game": myGame.id_game, "Title": myGame.title, "Description": myGame.description,
+               "Photo": myGame.photo, "Barcode": myGame.barcode, "Rate": myGame.rate,
+               "Id_base_game": myGame.id_base_game, "Min_players": myGame.min_players,
+               "Max_players": myGame.max_players, "Time": myGame.time}
         result.append(dic)
-
-    return JsonResponse(dic, safe=False)
+    print(len(result))
+    return JsonResponse(result, safe=False)
 
 
 def my_image(request):
