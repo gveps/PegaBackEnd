@@ -1,6 +1,6 @@
 from django.urls import path
 
-from backend import view_reservation
+from backend import view_reservation, view_filter
 from backend import viewStatistics
 from . import views
 
@@ -9,4 +9,7 @@ urlpatterns = [
     path('add_game', views.add_game, name='add_game'),
     path('statistic', viewStatistics.tmp, name='statistics'),
     path('reservation', view_reservation.reservation, name='reservation'),
+    path('get_game_by_title', view_filter.get_game_by_title, name='get_game_by_id'),
+    path('get_all_games', view_filter.get_all_games, name='get_all_games'),
+    path('get_filter_games', view_filter.get_filter_game, name='get_filter_games')
 ]
