@@ -9,7 +9,7 @@ def get_filter_game(request):
 
         # 0, 1, 2, 3, 4
         players = request.GET.get('players')
-        # 60, 120, 0
+        # 60, 120, 1000
         time = request.GET.get('time')
         # 0-non popular, 1-popular
         popularity = request.GET.get('popularity')
@@ -23,20 +23,24 @@ def get_filter_game(request):
 
         games = Game.objects.all()
 
+        print(len(games))
+
         result_game = []
         for game in games:
-            if not (game.min_players >= players):
+            if not game.time < int(time):
                 continue
-
-            if not (game.time <= time):
+            print(f'{game.time} : {time}')
+            print(f'players: {game.min_players} : {players}')
+            if game.min_players < int(players):
                 continue
 
             result_game.append(game)
 
-        if popularity == 1:
-            top = Game.objects.order_by('-popularity')[:10]
+        print(len(result_game))
+        if int(popularity) == 1:
+            top = Game.objects.order_by('-popularity')[0:50]
         else:
-            top = Game.objects.order_by('-popularity')[40:50]
+            top = Game.objects.order_by('-popularity')[50:120]
 
         json_result = []
         for game in result_game:
@@ -53,6 +57,7 @@ def get_filter_game(request):
                         'time': game.time
                     }
                     json_result.append(json_game)
+        print(len(json_result))
 
         return JsonResponse(json_result, safe=False)
     else:
@@ -106,6 +111,6 @@ def get_all_games(request):
             }
             result.append(json)
         print(result)
-        return JsonResponse(result, safe=False)
+        return JsonResponse(result[:10], safe=False)
     else:
         return JsonResponse({'Response': 'use GET'})
