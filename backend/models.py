@@ -15,6 +15,8 @@ class Game(models.Model):
     max_players = models.IntegerField(default=None, null=True)
     time = models.IntegerField(default=None, null=True)
 
+    def __str__(self):
+        return f'title: {self.title} id: {self.id}'
 
 class Malfunction(models.Model):
     idgameentity = models.ForeignKey(Game, on_delete=models.CASCADE)
