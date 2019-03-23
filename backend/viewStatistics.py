@@ -28,10 +28,10 @@ def tmp(request):
 
 
 def my_image(request):
-    file_name = request.GET.get('filename', '')
-    root, extention =  os.path.splitext(file_name)
-    image_data = open("backend/resources/game_photos/" + file_name, "rb").read()
-    return HttpResponse(image_data, content_type="image/" + extention)
+    file_name = request.GET.get('game_name', '').lower()
+    # root, extention = os.path.splitext(file_name.lower())
+    image_data = open("backend/resources/game_photos/" + file_name + ".jpg", "rb").read()
+    return HttpResponse(image_data, content_type="image/jpg")
 
 
 def getReservations(request):
