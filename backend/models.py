@@ -14,7 +14,7 @@ class Game(models.Model):
     min_players = models.IntegerField(default=1)
     max_players = models.IntegerField(default=None, null=True)
     time = models.IntegerField(default=None, null=True)
-    popularity=models.IntegerField(default=0,null=True)
+    popularity=models.IntegerField(default=0, null=True)
 
     def __str__(self):
         return f'title: {self.title} id: {self.id}'
@@ -41,3 +41,14 @@ class CategoryType(models.Model):
 class GameCategory(models.Model):
     id_category = models.ForeignKey(CategoryType, on_delete=models.CASCADE)
     idgame = models.ForeignKey(Game, on_delete=models.CASCADE)
+
+
+class Event(models.Model):
+    title = models.CharField(max_length=50)
+    id_reservation = models.ForeignKey(Reservation, on_delete=models.CASCADE)
+
+
+class EventUser(models.Model):
+    id_event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    id_user = models.ForeignKey(User, on_delete=models.CASCADE)
+

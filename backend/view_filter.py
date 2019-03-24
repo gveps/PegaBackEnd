@@ -1,7 +1,10 @@
+import datetime
+
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, JsonResponse
+from rest_framework.decorators import api_view
 
-from backend.models import Game
+from backend.models import Game, Reservation
 
 
 def get_filter_game(request):
@@ -47,9 +50,9 @@ def get_filter_game(request):
             for g_top in top:
                 if game.title == g_top.title:
                     json_game = {
+                        'id': game.id,
                         'title': game.title,
                         'description': game.description,
-                        'photo': game.photo,
                         'barcode': game.barcode,
                         'rate': game.rate,
                         'min_players': game.min_players,
@@ -79,9 +82,9 @@ def get_game_by_title(request):
             game = game.first()
 
         json_game = {
+            'id': game.id,
             'title': game.title,
             'description': game.description,
-            'photo': game.photo,
             'barcode': game.barcode,
             'rate': game.rate,
             'min_players': game.min_players,
@@ -99,18 +102,30 @@ def get_all_games(request):
 
         result = []
         for game in games:
+            status = 0
+
+            test = Reservation.objects.filter(data__range=[datetime.datetime.today().strftime('%Y-%m-%d'), (
+                        datetime.datetime.today() + datetime.timedelta(days=3)).strftime('%Y-%m-%d')], idgame=game.id)
+            if len(test) > 0:
+                status = 1
+
+            test = Reservation.objects.filter(data__range=[datetime.datetime.today().strftime('%Y-%m-%d'), datetime.datetime.today().strftime('%Y-%m-%d')], idgame=game.id)
+            if len(test) > 0:
+                status = 2
+
             json = {
+                'id': game.id,
                 'title': game.title,
                 'description': game.description,
-                'photo': game.photo,
                 'barcode': game.barcode,
                 'rate': game.rate,
                 'min_players': game.min_players,
                 'max_players': game.max_players,
-                'time': game.time
+                'time': game.time,
+                'status': status
             }
             result.append(json)
         print(len(result))
-        return JsonResponse(result, safe=False)
+        return JsonResponse(result[:15], safe=False)
     else:
         return JsonResponse({'Response': 'use GET'})
