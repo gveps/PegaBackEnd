@@ -2,6 +2,11 @@ from django.http import HttpResponse, JsonResponse
 from backend.models import Game
 import csv
 
+import re
+
+import requests
+from bs4 import BeautifulSoup
+
 
 def index(request):
     return HttpResponse("Hello, world. You're at the polls index.")
@@ -73,3 +78,31 @@ def import_csv(request):
             game.save()
     csvFile.close()
     return HttpResponse("OK")
+
+
+def add_descriptions(request):
+    url = "https://boardgamegeek.com/collection/user/PegaKrakow?own=1&subtype=boardgame&ff=1&fbclid=IwAR3fTr8OcrF1hyQIPi-El1nMRPQy5qW-fC-bqp0bS3b84rVcCyYALkhJ1C4"
+    req = requests.get(url)
+    text = req.text
+    html = BeautifulSoup(text, 'html.parser')
+    tds = html.findAll("a", href=re.compile("^\/boardgame\/[0-9]"))
+
+    for href in tds:
+        link = href['href']
+        name = href.text
+
+        url = "https://boardgamegeek.com" + link
+        # print(url)
+        req = requests.get(url)
+        text = req.text
+        # print(text)
+        html = BeautifulSoup(text, 'html.parser')
+        description = html.findAll('meta', property="og:description")
+
+        # print(description[0]["content"])
+        titles = html.findAll('meta', property="og:title")
+        title = titles[0]["content"]
+        print(title)
+        Game.objects.update_or_create(title=title, defaults={'description': description})
+
+    return HttpResponse("OK BOB")

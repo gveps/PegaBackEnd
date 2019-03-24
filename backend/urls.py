@@ -13,5 +13,8 @@ urlpatterns = [
     path('reservation', view_reservation.reservation, name='reservation'),
     path('get_game_by_title', view_filter.get_game_by_title, name='get_game_by_id'),
     path('get_all_games', view_filter.get_all_games, name='get_all_games'),
-    path('get_filter_games', view_filter.get_filter_game, name='get_filter_games')
+    path('get_filter_games', view_filter.get_filter_game, name='get_filter_games'),
+    path('add_description', views.add_descriptions, name='add_descriptions'),
+    path('import_csv', views.import_csv, name='import_csv')
+
 ]
