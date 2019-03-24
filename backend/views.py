@@ -101,7 +101,7 @@ def add_descriptions(request):
 
         # print(description[0]["content"])
         titles = html.findAll('meta', property="og:title")
-        title = titles[0]["content"]
+        title = titles[0]["conte    nt"]
         print(title)
         Game.objects.update_or_create(title=title, defaults={'description': description})
 

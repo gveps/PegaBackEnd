@@ -17,4 +17,7 @@ urlpatterns = [
     path('add_description', views.add_descriptions, name='add_descriptions'),
     path('import_csv', views.import_csv, name='import_csv')
 
+    path('get_filter_games', view_filter.get_filter_game, name='get_filter_games'),
+    path('reservation_id_game', view_reservation.reservation_id),
+    path('filter_game', view_filter.filter_game)
 ]
