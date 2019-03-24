@@ -14,5 +14,6 @@ urlpatterns = [
     path('get_game_by_title', view_filter.get_game_by_title, name='get_game_by_id'),
     path('get_all_games', view_filter.get_all_games, name='get_all_games'),
     path('get_filter_games', view_filter.get_filter_game, name='get_filter_games'),
-    path('reservation_id_game', view_reservation.reservation_id)
+    path('reservation_id_game', view_reservation.reservation_id),
+    path('filter_game', view_filter.filter_game)
 ]

@@ -1,4 +1,5 @@
 import datetime
+import re
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, JsonResponse
@@ -127,5 +128,35 @@ def get_all_games(request):
             result.append(json)
         print(len(result))
         return JsonResponse(result[:15], safe=False)
+    else:
+        return JsonResponse({'Response': 'use GET'})
+
+
+def filter_game(request):
+    if request.method == 'GET':
+        word = request.GET.get('word')
+
+        if word is None:
+            return JsonResponse({
+                'word': word
+            })
+
+        games = Game.objects.filter(title__contains=word)
+
+        result = []
+        for game in games:
+            json = {
+                'id': game.id,
+                'title': game.title,
+                'description': game.description,
+                'barcode': game.barcode,
+                'rate': game.rate,
+                'min_players': game.min_players,
+                'max_players': game.max_players,
+                'time': game.time,
+            }
+            result.append(json)
+
+        return JsonResponse(result, safe=False)
     else:
         return JsonResponse({'Response': 'use GET'})
